@@ -24,7 +24,7 @@ export default class GameController {
     ) {
       const game = await Game.findOne(id)
       if (!game) throw new NotFoundError('Cannot find game')
-
+      console.log(game)
       return Game.merge(game, update).save()
     }
 
@@ -33,6 +33,7 @@ export default class GameController {
       createGame(
         @Body() game: Game
       ) {
+        console.log(game)
         return game.save()
       }
 }
