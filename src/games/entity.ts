@@ -8,7 +8,6 @@ const defaultBoard = [
 	['o', 'o', 'o']
 ]
 
-
 @Entity()
 export default class Game extends BaseEntity {
 
@@ -27,19 +26,12 @@ export default class Game extends BaseEntity {
   @Column('json', {default: defaultBoard })
   board: JSON
 
-  setRandomColor() {
+  setRandomColor = () => {
     const colorsArray = ["red", "blue", "green", "yellow", "magenta"]
     const randomIndex = Math.floor(Math.random() * colorsArray.length); 
     const randomColor = colorsArray[randomIndex];
     console.log(typeof randomColor)
     this.color = randomColor
   }
-
-  checkMoves = (board1, board2) => 
-  board1
-    .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
-    .reduce((a, b) => a.concat(b))
-    .length
-
 }
 

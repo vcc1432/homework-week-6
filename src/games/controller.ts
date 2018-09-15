@@ -1,6 +1,12 @@
 import { JsonController, Get, Param, NotFoundError, Body, Put, HttpCode, Post, BadRequestError } from 'routing-controllers'
 import Game from './entity'
 
+ const checkMoves = (board1, board2) => 
+  board1
+    .map((row, y) => row.filter((cell, x) => board2[y][x] !== cell))
+    .reduce((a, b) => a.concat(b))
+    .length
+
 @JsonController()
 export default class GameController {
 
@@ -25,14 +31,21 @@ export default class GameController {
       const game = await Game.findOne(id)
       if (!game) throw new NotFoundError('Cannot find game')
 
-      console.log("The game is: ", game.board, "Update: ", update.board)
-      console.log(game)
-
-      if(game.checkMoves(game.board, update.board) <= 1) {
-        return Game.merge(game, update).save()
+      if (update.board) {
+        if(checkMoves(game.board, update.board) <= 1) {
+          return Game.merge(game, update).save()
+        } else {
+          throw new BadRequestError('You cannot make more than one move!')
+        } 
+      } else if (update.color) {
+        if (["red", "blue", "green", "yellow", "magenta"].includes(update.color)) {
+          return Game.merge(game, update).save()
+        } else {
+          throw new BadRequestError('You have to assign the right color!')
+        }
       } else {
-        throw new BadRequestError('You cannot make more than one move!')
-      }     
+        return Game.merge(game, update).save()
+      }
     }
 
     @Post('/games')
