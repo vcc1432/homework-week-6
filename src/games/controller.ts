@@ -1,4 +1,4 @@
-import { JsonController, Get, Param, NotFoundError, Body, Put, HttpCode, Post } from 'routing-controllers'
+import { JsonController, Get, Param, NotFoundError, Body, Put, HttpCode, Post, BadRequestError } from 'routing-controllers'
 import Game from './entity'
 
 @JsonController()
@@ -24,8 +24,15 @@ export default class GameController {
     ) {
       const game = await Game.findOne(id)
       if (!game) throw new NotFoundError('Cannot find game')
+
+      console.log("The game is: ", game.board, "Update: ", update.board)
       console.log(game)
-      return Game.merge(game, update).save()
+
+      if(game.checkMoves(game.board, update.board) <= 1) {
+        return Game.merge(game, update).save()
+      } else {
+        throw new BadRequestError('You cannot make more than one move!')
+      }     
     }
 
     @Post('/games')
