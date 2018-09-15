@@ -18,8 +18,7 @@ export default class Game extends BaseEntity {
   @Column('text', {nullable:false})
   name: string
 
- 
-  // @IsIn(["red", "blue", "green", "yellow", "magenta"])
+   // @IsIn(["red", "blue", "green", "yellow", "magenta"])
   @Column('text', {nullable:false})
   color: string
 
@@ -30,7 +29,7 @@ export default class Game extends BaseEntity {
     const colorsArray = ["red", "blue", "green", "yellow", "magenta"]
     const randomIndex = Math.floor(Math.random() * colorsArray.length); 
     const randomColor = colorsArray[randomIndex];
-    console.log(typeof randomColor)
+  
     this.color = randomColor
   }
 }

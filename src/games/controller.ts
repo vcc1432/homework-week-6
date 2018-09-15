@@ -41,7 +41,7 @@ export default class GameController {
         if (["red", "blue", "green", "yellow", "magenta"].includes(update.color)) {
           return Game.merge(game, update).save()
         } else {
-          throw new BadRequestError('You have to assign the right color!')
+          throw new BadRequestError('You have to assign one of the following colors: red, blue, green, yellow or magenta')
         }
       } else {
         return Game.merge(game, update).save()
