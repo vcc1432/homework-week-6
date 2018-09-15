@@ -30,10 +30,12 @@ export default class GameController {
 
     @Post('/games')
       @HttpCode(201)
-      createGame(
+      async createGame(
         @Body() game: Game
       ) {
-        console.log(game)
-        return game.save()
+          const {color, ...rest} = game
+          const entity = Game.create(rest)  
+          await entity.setRandomColor()
+          return entity.save()
       }
 }
